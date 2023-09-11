@@ -7,12 +7,12 @@ import com.example.springBootPostgres.entity.User;
 import com.example.springBootPostgres.repository.UserRepository;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 
@@ -27,6 +27,7 @@ class SpringBootPostgresApplicationTests {
 	UserRepository userRepository;
 
 	@Test
+	@Order(1)
 	public void createEmployeeTest() {
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		UserDto userDTO = new UserDto(1, "Anna", "Anna@test.ru");
@@ -42,6 +43,7 @@ class SpringBootPostgresApplicationTests {
 	}
 
 	@Test
+	@Order(2)
 	public void findUserById(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		Response response = given()
@@ -56,22 +58,24 @@ class SpringBootPostgresApplicationTests {
 
 
 	@Test
+	@Order(3)
 	public void updateUserTest(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		UserDto userDTO = new UserDto(1, "Elena", "Elena@test.ru");
 		Response response = given()
 				.body(userDTO)
 				.when()
-				.put(API_USERS).
+				.put(API_USERS_ID).
 				then().log().all()
 				.extract().response();
-		User user = userRepository.findByName("Anna").get();
+		User user = userRepository.findByName("Elena").get();
 		Assertions.assertThat(user.getName()).isEqualTo("Elena");
 		Assertions.assertThat(user.getEmail()).startsWith("Elena");
 	}
 
 
 	@Test
+	@Order(4)
 	public void deleteUser(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		Response response = given()
@@ -79,15 +83,21 @@ class SpringBootPostgresApplicationTests {
 				.delete(API_USERS_ID)
 				.then().log().all()
 				.extract().response();
-		User user = userRepository.findByName("Elena").get();
-		Assertions.assertThat(user.getName()).isNull();
+		User user1 = null;
+		Optional<User> findByName = userRepository.findByName("Elena");
+		if(findByName.isPresent()){
+			user1 = findByName.get();
+		}
+		Assertions.assertThat(user1).isNull();
+
 
 	}
-
 
 	@Test
 	public void cleanDB(){
 		userRepository.deleteAll();
+
+
 	}
 
 
