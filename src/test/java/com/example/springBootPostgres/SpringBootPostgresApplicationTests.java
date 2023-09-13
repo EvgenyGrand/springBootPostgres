@@ -6,21 +6,18 @@ import com.example.springBootPostgres.api.dto.UserDto;
 import com.example.springBootPostgres.entity.User;
 import com.example.springBootPostgres.repository.UserRepository;
 import io.restassured.response.Response;
-import jakarta.annotation.Priority;
-import net.bytebuddy.build.Plugin;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
 import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
-import static org.testng.TestRunner.PriorityWeight.priority;
+
 
 @SpringBootTest
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SpringBootPostgresApplicationTests {
 	private final static String URL = "http://localhost:8080";
 	private final static String API_USERS ="/users/";
@@ -28,9 +25,8 @@ class SpringBootPostgresApplicationTests {
 
 	@Autowired
 	UserRepository userRepository;
-
+    @Order(1)
 	@Test
-	@Priority(1)
 	public void createEmployeeTest() {
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		UserDto userDTO = new UserDto(1, "Anna", "Anna@test.ru");
@@ -45,8 +41,8 @@ class SpringBootPostgresApplicationTests {
 
 	}
 
+	@Order(2)
 	@Test
-
 	public void findUserById(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		Response response = given()
@@ -59,9 +55,8 @@ class SpringBootPostgresApplicationTests {
 		Assertions.assertThat(user.getEmail()).endsWith("@test.ru");
 	}
 
-
+    @Order(3)
 	@Test
-
 	public void updateUserTest(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		UserDto userDTO = new UserDto(1, "Elena", "Elena@test.ru");
@@ -76,9 +71,8 @@ class SpringBootPostgresApplicationTests {
 		Assertions.assertThat(user.getEmail()).startsWith("Elena");
 	}
 
-
+    @Order(4)
 	@Test
-
 	public void deleteUser(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		Response response = given()
@@ -95,7 +89,7 @@ class SpringBootPostgresApplicationTests {
 
 
 	}
-
+  @Order(5)
 	@Test
 	public void cleanDB(){
 		userRepository.deleteAll();
