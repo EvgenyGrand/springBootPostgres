@@ -6,6 +6,8 @@ import com.example.springBootPostgres.api.dto.UserDto;
 import com.example.springBootPostgres.entity.User;
 import com.example.springBootPostgres.repository.UserRepository;
 import io.restassured.response.Response;
+import jakarta.annotation.Priority;
+import net.bytebuddy.build.Plugin;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
+import static org.testng.TestRunner.PriorityWeight.priority;
 
 @SpringBootTest
 
@@ -27,7 +30,7 @@ class SpringBootPostgresApplicationTests {
 	UserRepository userRepository;
 
 	@Test
-	@Order(1)
+	@Priority(1)
 	public void createEmployeeTest() {
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		UserDto userDTO = new UserDto(1, "Anna", "Anna@test.ru");
@@ -43,7 +46,7 @@ class SpringBootPostgresApplicationTests {
 	}
 
 	@Test
-	@Order(2)
+
 	public void findUserById(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		Response response = given()
@@ -58,7 +61,7 @@ class SpringBootPostgresApplicationTests {
 
 
 	@Test
-	@Order(3)
+
 	public void updateUserTest(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		UserDto userDTO = new UserDto(1, "Elena", "Elena@test.ru");
@@ -75,7 +78,7 @@ class SpringBootPostgresApplicationTests {
 
 
 	@Test
-	@Order(4)
+
 	public void deleteUser(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
 		Response response = given()
