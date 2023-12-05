@@ -26,6 +26,7 @@ class SpringBootPostgresApplicationTests {
 	@Autowired
 	UserRepository userRepository;
     @Order(1)
+	@DisplayName("Создание пользователя")
 	@Test
 	public void createEmployeeTest() {
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
@@ -42,6 +43,7 @@ class SpringBootPostgresApplicationTests {
 	}
 
 	@Order(2)
+	@DisplayName("поиск пользователя по id")
 	@Test
 	public void findUserById(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
@@ -56,6 +58,7 @@ class SpringBootPostgresApplicationTests {
 	}
 
     @Order(3)
+	@DisplayName("Редактирование пользователя")
 	@Test
 	public void updateUserTest(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
@@ -72,6 +75,7 @@ class SpringBootPostgresApplicationTests {
 	}
 
     @Order(4)
+	@DisplayName("Удаление пользователя")
 	@Test
 	public void deleteUser(){
 		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
@@ -90,6 +94,7 @@ class SpringBootPostgresApplicationTests {
 
 	}
   @Order(5)
+  @DisplayName("очистка БД")
 	@Test
 	public void cleanDB(){
 		userRepository.deleteAll();
