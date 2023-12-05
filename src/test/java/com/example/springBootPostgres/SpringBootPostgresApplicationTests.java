@@ -8,6 +8,9 @@ import com.example.springBootPostgres.repository.UserRepository;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
@@ -29,8 +32,7 @@ class SpringBootPostgresApplicationTests {
 	@DisplayName("Создание пользователя")
 	@Test
 	public void createEmployeeTest() {
-		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());
-		UserDto userDTO = new UserDto(1, "Anna", "Anna@test.ru");
+		Specification.installSpecification(Specification.requestSpec(URL),Specification.responceSpecOk200());UserDto userDTO = new UserDto(1, "Anna", "Anna@test.ru");
 		Response response = given()
 				.body(userDTO)
 				.when()
